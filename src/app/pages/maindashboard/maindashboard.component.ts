@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { SettingsService } from 'src/app/services/settings.service';
+
+declare function customInitFunctions():any ;
 
 @Component({
   selector: 'app-maindashboard',
@@ -8,9 +11,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MaindashboardComponent implements OnInit {
 
-  constructor() { }
+
+  constructor(private settingsService:SettingsService) { }
 
   ngOnInit(): void {
+      customInitFunctions(); 
   }
-
 }
