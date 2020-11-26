@@ -5,6 +5,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { Grafica1Component } from './grafica1/grafica1.component';
 import { ProgressComponent } from './progress/progress.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
+import { PromesasComponent } from './promesas/promesas.component';
+import { RxjsComponent } from './rxjs/rxjs.component';
 
 
 
@@ -14,10 +16,13 @@ const routes: Routes = [
         path:'dashboard',
         component:MaindashboardComponent,
         children:[
-          {path:'',component:DashboardComponent},
-          {path:'progress',component:ProgressComponent},
-          {path:'grafica1',component:Grafica1Component},
-          {path:'account-settings',component:AccountSettingsComponent},
+          {path:'',component:DashboardComponent,data:{tittle:'Dashboard'}},
+          {path:'progress',component:ProgressComponent,data:{tittle:'Progress Bar'}},
+          {path:'grafica1',component:Grafica1Component,data:{tittle:'Gráfica #1'}},
+          {path:'promesas',component:PromesasComponent,data:{tittle:'Promesas'}},
+          {path:'rxjs',component:RxjsComponent,data:{tittle:'RXJS'}},
+
+          {path:'account-settings',component:AccountSettingsComponent,data:{tittle:'Ajuste de Cuenta'}},          
           {path:'',redirectTo:'/dashboard',pathMatch:'full'}
         ]
       }
