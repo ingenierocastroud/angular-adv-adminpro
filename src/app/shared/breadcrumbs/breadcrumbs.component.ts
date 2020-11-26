@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
+import { ActivationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter,map} from 'rxjs/operators';
 
@@ -12,7 +12,7 @@ import { filter,map} from 'rxjs/operators';
 export class BreadcrumbsComponent implements OnDestroy{
   public titulo:string="";
   public tituloSubs$:Subscription;
-  constructor(private router:Router,private activatedRoute:ActivatedRoute) { 
+  constructor(private router:Router) { 
     this.tituloSubs$=this.getArgumentosRuta()
                          .subscribe(({tittle}) =>{
                            this.titulo=tittle;document.title=`Admin Pro - ${tittle}`
@@ -26,7 +26,7 @@ export class BreadcrumbsComponent implements OnDestroy{
   getArgumentosRuta(){
    return this.router.events
     .pipe(
-      filter(event=>event instanceof ActivationEnd),
+      filter((event:any)=>event instanceof ActivationEnd),
       filter((event:ActivationEnd)=>event.snapshot.firstChild===null),
       map((event:ActivationEnd)=>event.snapshot.data)
     )   
