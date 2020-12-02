@@ -10,6 +10,18 @@
      cursor: pointer;
 }
 
+#logOutSidebar{
+    cursor: pointer;    
+}
+#logOutSidebar:hover{
+    color: white;    
+}
+
+.img-avatar{
+    height: 200px;
+    width: 200px;
+}
+
 #google-btn{
     align-items: center;
     display: flex;

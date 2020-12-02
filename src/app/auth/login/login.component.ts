@@ -13,7 +13,7 @@ declare const gapi:any;
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit{
-  public auth2:any;
+  public auth2LC:any;
   public formSubmitted=false;
   public loginForm=this.fb.group({
     email:[ localStorage.getItem('email')|| '',[Validators.required,Validators.email]],
@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit{
   constructor(private fb:FormBuilder,private usuarioService:UsuarioService,private router:Router,private ngZone:NgZone) { }
 
   ngOnInit(): void {
-    this.renderButton();
+      this.renderButton();
   }
 
   login(){
@@ -38,7 +38,8 @@ export class LoginComponent implements OnInit{
           else{
             localStorage.removeItem('email');
           }
-          this.router.navigateByUrl('/');
+          console.log(localStorage.getItem('token'));
+          this.router.navigateByUrl('/');      
         },(err)=>{
           Swal.fire('Error',err.error.msg,'error');
       }
@@ -47,24 +48,8 @@ export class LoginComponent implements OnInit{
 
   }
 
-/*  onSuccess(googleUser:any) {
-    console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
-    var id_token = googleUser.getAuthResponse().id_token;
-    this.usuarioService.loginUsuarioGoogle(id_token).subscribe(
-          resp=>{
-            console.log(resp);
-            this.router.navigateByUrl('/');
-          },(err)=>{
-            Swal.fire('Error',err.error.msg,'error');
-         }
-       );
-  }
 
-  onFailure(error:any) {
-    console.log(error);
-  }*/
-
-  renderButton() {
+ renderButton() {
     gapi.signin2.render('my-signin2', {
       'scope': 'profile email',
       'width': 240,
@@ -77,24 +62,25 @@ export class LoginComponent implements OnInit{
 
  async startApp(){
       await this.usuarioService.initGoogle();
-      this.auth2=this.usuarioService.auth2;
+      this.auth2LC=this.usuarioService.auth2;
       this.attachSignin(document.getElementById('my-signin2'));
   };
 
   attachSignin(element:any) {
     console.log(element.id);
-    this.auth2.attachClickHandler(element, {},
+    this.auth2LC.attachClickHandler(element, {},
         (googleUser:any)=>{
           var id_token = googleUser.getAuthResponse().id_token;
+          console.log('token google');
           console.log(id_token);
-          this.usuarioService.loginUsuarioGoogle(id_token).subscribe(
+          this.usuarioService.loginUsuarioGoogle(id_token)
+          .subscribe(
             resp=>{
               this.ngZone.run(()=>{
+              console.log('deberia redireccionar');
                 this.router.navigateByUrl('/');
-              })
-            },(err)=>{
-              Swal.fire('Error',err.error.msg,'error');
-           }
+              }
+              )}
          );
         }, 
         (error:any)=> {

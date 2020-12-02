@@ -6,14 +6,12 @@ import { RegisterForm } from '../interfaces/registerForm.interface';
 import { map, tap,catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { Usuario } from '../models/usuario.model';
+import { PerfilForm } from '../interfaces/perfilForm.interface';
 
 
 const base_url=environment.base_url;
 
-const headersGeneric = {
-  'Content-Type': 'application/json',
-  'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
-}
 
 declare const gapi:any;
 
@@ -22,30 +20,43 @@ declare const gapi:any;
 })
 export class UsuarioService {
 
+  
+
 
   constructor(private http:HttpClient,private router:Router,private ngZone:NgZone) {
     this.initGoogle();
    }
   public auth2:any;
+  public usuario?:Usuario;
+
+  get header(){
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token') || ''}`
+    }
+  }
+  get uid(){
+    return this.usuario?.uid || '';
+  }
 
   initGoogle(){
-    return new Promise(
-     resolve=> {
+    return new Promise(resolve=> {
       gapi.load('auth2',()=>{
         this.auth2 = gapi.auth2.init({
           client_id: '1047320770774-a1fsmo99r4c3k24ramio0qpkhd6b6hl0.apps.googleusercontent.com',
           cookiepolicy: 'single_host_origin',
         });
-      });
-      resolve();
-      }
-    );
+        resolve();
+      });  
+    })
+  }
 
-  };
-
+ 
   logout(){
     localStorage.removeItem('token');
-    this.auth2.signOut().then(()=>{
+    this.auth2.signOut().then((resp:any)=>{
+      console.log('response logout');
+      console.log(resp)
       this.ngZone.run(()=>{
         this.router.navigateByUrl('/login');
       })
@@ -54,16 +65,31 @@ export class UsuarioService {
   }
 
   validarToken():Observable<boolean>{
+   
     return this.http.get(`${base_url}/auth/renew`,
-      { headers: headersGeneric }
+      { headers: this.header }
     )
     .pipe(
-      tap((resp:any)=>{
+      map((resp:any)=>{
+        console.log(resp.usuario);
+        console.log(localStorage.getItem('token'))
+          const {nombre,email,uid,img,role,google}=resp.usuario;
+          this.usuario=new Usuario(nombre,email,uid,img,role,google,'');
           localStorage.setItem('token',resp.token);
+          return true;
       }),
-      map(resp=>true) ,
       catchError(err=>of(false))   
     );
+  }
+
+  actualizarPerfil(formData:PerfilForm){
+    formData.rol=this.usuario?.role;
+    return this.http.put(`${base_url}/usuarios/${this.uid}`,formData, { headers: this.header })
+    .pipe(
+      tap((resp:any)=>{
+        console.log(resp);        
+      })
+    )
   }
 
   crearUsuario(formData:RegisterForm){
@@ -80,15 +106,19 @@ export class UsuarioService {
     return this.http.post(`${base_url}/auth`,formData)
             .pipe(
               tap((resp:any)=>{
+                console.log(resp.token);                
                   localStorage.setItem('token',resp.token);
               })
             )
   }
 
   loginUsuarioGoogle(token:string){
+    console.log('entro google');
     return this.http.post(`${base_url}/auth/google`,{token})
             .pipe(
               tap((resp:any)=>{
+                console.log('respuetsa login google usuario');
+                console.log(resp);
                   localStorage.setItem('token',resp.token);
               })
             )
