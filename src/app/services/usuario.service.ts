@@ -3,11 +3,12 @@ import { Injectable, NgZone } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { LoginForm } from '../interfaces/loginForm.interface';
 import { RegisterForm } from '../interfaces/registerForm.interface';
-import { map, tap,catchError } from 'rxjs/operators';
+import { map, tap,catchError, delay } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario.model';
 import { PerfilForm } from '../interfaces/perfilForm.interface';
+import { CargarUsuarios } from '../interfaces/cargarUsuarios.interface';
 
 
 const base_url=environment.base_url;
@@ -83,7 +84,7 @@ export class UsuarioService {
   }
 
   actualizarPerfil(formData:PerfilForm){
-    formData.rol=this.usuario?.role;
+   formData.rol=this.usuario?.role;
     return this.http.put(`${base_url}/usuarios/${this.uid}`,formData, { headers: this.header })
     .pipe(
       tap((resp:any)=>{
@@ -91,6 +92,16 @@ export class UsuarioService {
       })
     )
   }
+
+  actualizarUsuario(usuario:Usuario){
+    // formData.rol=this.usuario?.role;
+     return this.http.put(`${base_url}/usuarios/${usuario.uid}`,usuario, { headers: this.header })
+     .pipe(
+       tap((resp:any)=>{
+         console.log(resp);        
+       })
+     )
+   }
 
   crearUsuario(formData:RegisterForm){
     return this.http.post(`${base_url}/usuarios`,formData)
@@ -122,6 +133,21 @@ export class UsuarioService {
                   localStorage.setItem('token',resp.token);
               })
             )
+  }
+
+  cargarUsuarios(desde:number=0){
+    return this.http.get<CargarUsuarios>(`${base_url}/usuarios?desde=${desde}`, { headers: this.header })
+    .pipe(
+      delay(500),
+      map((resp:any)=>{
+         const usuarios=resp.usuarios.map((user:Usuario)=>
+         new Usuario(user.nombre,user.email,user.uid,user.img,user.role,user.google,''))
+        return {
+            total:resp.total,
+            usuarios
+        };
+      })
+    )
   }
 
 }

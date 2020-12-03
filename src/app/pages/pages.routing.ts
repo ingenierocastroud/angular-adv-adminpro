@@ -10,6 +10,9 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { PerfilComponent } from './perfil/perfil.component';
+import { UsuariosComponent } from './mantenimientos/usuarios/usuarios.component';
+import { MedicosComponent } from './mantenimientos/medicos/medicos.component';
+import { HospitalesComponent } from './mantenimientos/hospitales/hospitales.component';
 
 
 
@@ -28,7 +31,12 @@ const routes: Routes = [
           {path:'rxjs',component:RxjsComponent,data:{tittle:'RXJS'}},
           {path:'perfil',component:PerfilComponent,data:{tittle:'Mi Perfil'}},
           {path:'account-settings',component:AccountSettingsComponent,data:{tittle:'Ajuste de Cuenta'}},          
-          {path:'',redirectTo:'/dashboard',pathMatch:'full'}
+          {path:'',redirectTo:'/dashboard',pathMatch:'full'},
+
+          //Mantenimientos
+          {path:'usuarios',component:UsuariosComponent,data:{tittle:'Usuarios App'}},
+          {path:'medicos',component:MedicosComponent,data:{tittle:'Médicos'}},
+          {path:'hospitales',component:HospitalesComponent,data:{tittle:'Hospitales'}},
         ]
       }
     //{ path: 'path/:routeParam', component: MyComponent },
