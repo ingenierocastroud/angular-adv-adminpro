@@ -44,7 +44,8 @@ actualizarFoto(){
 
   const id=this.modalImagenService.id;
   const tipo=this.modalImagenService.tipo;
-
+  console.log(this.modalImagenService.id);
+  console.log(this.modalImagenService.tipo);
   if(this.imagenSubir){
     this.fileUploadService
     .actualizarFoto(this.imagenSubir,tipo,id)

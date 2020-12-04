@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Hospital } from '../models/hospital.model';
+import { Medico } from '../models/medico.model';
 import { Usuario } from '../models/usuario.model';
 
 const base_url=environment.base_url;
@@ -30,7 +32,12 @@ export class BusquedasService {
           case 'usuarios':
             return resp.resultados.map((user:Usuario)=>
             new Usuario(user.nombre,user.email,user.uid,user.img,user.role,user.google,''));
-                    
+          case 'hospitales':
+              return resp.resultados.map((hospital:Hospital)=>
+              new Hospital(hospital.nombre,hospital.img,hospital.id,hospital.usuario));          
+          case 'medicos':
+            return resp.resultados.map((medico:Medico)=>
+            new Medico(medico.nombre,medico.img,medico.id,medico.usuario,medico.hospital));           
           default:
             break;
         }

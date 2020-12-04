@@ -17,6 +17,8 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { UsuariosComponent } from './mantenimientos/usuarios/usuarios.component';
 import { MedicosComponent } from './mantenimientos/medicos/medicos.component';
 import { HospitalesComponent } from './mantenimientos/hospitales/hospitales.component';
+import { PipesModule } from '../pipes/pipes.module';
+import { MedicoComponent } from './mantenimientos/medicos/medico.component';
 
 
 
@@ -34,14 +36,16 @@ import { HospitalesComponent } from './mantenimientos/hospitales/hospitales.comp
        PerfilComponent,
        UsuariosComponent,
        MedicosComponent,
-       HospitalesComponent ],
+       HospitalesComponent,
+       MedicoComponent ],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,    
     SharedModule,
     ComponentsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PipesModule 
   ],
   exports: [ 
     DashboardComponent,

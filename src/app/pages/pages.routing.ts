@@ -13,6 +13,7 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { UsuariosComponent } from './mantenimientos/usuarios/usuarios.component';
 import { MedicosComponent } from './mantenimientos/medicos/medicos.component';
 import { HospitalesComponent } from './mantenimientos/hospitales/hospitales.component';
+import { MedicoComponent } from './mantenimientos/medicos/medico.component';
 
 
 
@@ -36,6 +37,7 @@ const routes: Routes = [
           //Mantenimientos
           {path:'usuarios',component:UsuariosComponent,data:{tittle:'Usuarios App'}},
           {path:'medicos',component:MedicosComponent,data:{tittle:'Médicos'}},
+          {path:'medico/:id',component:MedicoComponent,data:{tittle:'Médicos'}},
           {path:'hospitales',component:HospitalesComponent,data:{tittle:'Hospitales'}},
         ]
       }
